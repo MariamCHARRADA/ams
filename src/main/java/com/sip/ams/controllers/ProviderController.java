@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sip.ams.entities.Provider;
@@ -19,5 +20,12 @@ public class ProviderController {
 	public List<Provider> getAllProviders() {
 		return (List<Provider>)providerRepository.findAll();
 	}
+	
+	@PostMapping("/provider")
+	public Provider addProvider() {
+		Provider p = new Provider("Sana", "SanaSanaSana@gmail.com", "France");
+		return providerRepository.save(p);
+	}
+	
 
 }
