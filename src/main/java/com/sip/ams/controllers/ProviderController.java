@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,26 @@ public class ProviderController {
 		else {
 			providerRepository.deleteById(id);
 			return new ResponseEntity<>(opt.get(), HttpStatus.OK);
+		}
+	}
+	
+	@PutMapping("/")
+	@Operation(summary = "Updating a provider")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Provider is updated successfully"),
+	@ApiResponse(responseCode = "404", description = "Provider not found") })
+	public ResponseEntity<Provider> updateProvider(@RequestBody Provider provider) {
+
+		Optional<Provider> opt = this.providerRepository.findById(provider.getId());
+
+		if (opt.isEmpty())
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		else {
+			Provider savedProvider = opt.get();
+			savedProvider.setName(provider.getName());
+			savedProvider.setEmail(provider.getEmail());
+			savedProvider.setAddress(provider.getAddress());
+
+			return new ResponseEntity<>(providerRepository.save(savedProvider), HttpStatus.OK);
 		}
 	}
 
