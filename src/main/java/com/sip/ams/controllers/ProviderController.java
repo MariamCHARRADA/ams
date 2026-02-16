@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; //What really changes API return status
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +35,7 @@ public class ProviderController {
 		return new ResponseEntity<>((List<Provider>) providerRepository.findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping("/{id}") //id id is a variable
+	@GetMapping("/{id}") //id is a variable
 	@Operation(summary = "Fetching provider by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Provider is found"),
 			@ApiResponse(responseCode = "404", description = "Provider not found") })
@@ -45,7 +46,23 @@ public class ProviderController {
 		if (opt.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		else
+			return new ResponseEntity<>(opt.get(), HttpStatus.FOUND);
+	}
+	
+	@DeleteMapping("/{id}") //id is a variable
+	@Operation(summary = "Deleting provider by ID")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Provider is deleted"),
+	@ApiResponse(responseCode = "404", description = "Provider not found") })
+	public ResponseEntity<Provider> deleteProviderById(@PathVariable int id) { //id is retrieved from the path URL
+
+		Optional<Provider> opt = this.providerRepository.findById(id);
+
+		if (opt.isEmpty())
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		else {
+			providerRepository.deleteById(id);
 			return new ResponseEntity<>(opt.get(), HttpStatus.OK);
+		}
 	}
 
 	@PostMapping("/")
