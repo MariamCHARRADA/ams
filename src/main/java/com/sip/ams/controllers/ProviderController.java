@@ -46,12 +46,12 @@ public class ProviderController {
 		if (opt.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		else
-			return new ResponseEntity<>(opt.get(), HttpStatus.FOUND);
+			return new ResponseEntity<>(opt.get(), HttpStatus.FOUND); //code 302
 	}
 	
 	@DeleteMapping("/{id}") //id is a variable
 	@Operation(summary = "Deleting provider by ID")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Provider is deleted"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Provider is deleted"),
 	@ApiResponse(responseCode = "404", description = "Provider not found") })
 	public ResponseEntity<Provider> deleteProviderById(@PathVariable int id) { //id is retrieved from the path URL
 
