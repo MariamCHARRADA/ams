@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; //What really changes API return status
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,15 +25,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("providers")
+@CrossOrigin("*")
 public class ProviderController {
 
-	@Autowired
+	@Autowired //IOC inversion of control = injecting dependencies
 	ProviderService providerService;
 
 	@GetMapping("/")
 	@Operation(summary = "Fetching all providers") // Mere annotations for Swagger
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "getAllProviders Successs"),
-			@ApiResponse(responseCode = "500", description = "Problem fetching providers") })
+	@ApiResponse(responseCode = "500", description = "Problem fetching providers") })
 	public ResponseEntity<List<Provider>> getAllProviders() {
 		return new ResponseEntity<>(this.providerService.getAllProviders(), HttpStatus.OK);
 	}
@@ -40,7 +42,7 @@ public class ProviderController {
 	@GetMapping("/{id}") // id is a variable
 	@Operation(summary = "Fetching provider by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Provider is found"),
-			@ApiResponse(responseCode = "404", description = "Provider not found") })
+	@ApiResponse(responseCode = "404", description = "Provider not found") })
 	public ResponseEntity<Provider> getProviderById(@PathVariable int id) { // id is retrieved from the path URL
 
 		Optional<Provider> opt = this.providerService.getProviderById(id);
